@@ -1,0 +1,39 @@
+# Local config (machine-specific paths)
+config_local.py
+
+# Data and output (large files, not for version control)
+data/
+results/
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+*.egg-info/
+dist/
+build/
+.eggs/
+*.egg
+
+# Jupyter
+.ipynb_checkpoints/
+*.ipynb
+
+# Environments
+.env
+.venv
+venv/
+env/
+ENV/
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDE
+.vscode/
+.idea/
+*.swp
