@@ -2,8 +2,10 @@
 config_local.py
 
 # Data and output (large files, not for version control)
-data/
-results/
+data/*
+!data/.gitkeep
+results/*
+!results/.gitkeep
 
 # Python
 __pycache__/
