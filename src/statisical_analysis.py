@@ -2,20 +2,20 @@
 statistical_analysis.py — All four statistical tests for the thesis.
 
 Tests:
-    1. Phase comparison      — does synchrony differ across instructional / discussion / RESCHU?
-    2. Real vs surrogate     — does real dyad synchrony exceed the chance baseline?
-    3. Zoom effect           — does visual access (zoom on/off) moderate synchrony?
+    1. Phase comparison — does synchrony differ across instructional / discussion / RESCHU?
+    2. Real vs surrogate — does real dyad synchrony exceed the chance baseline?
+    3. Zoom effect — does visual access (zoom on/off) moderate synchrony?
     4. Synchrony–performance — does synchrony predict RESCHU task performance?
 
 Signals analysed: expressivity + all six emotion composites.
-Metric focus:     zero-lag Pearson r (primary), peak cross-correlation r (secondary).
+Metric focus: zero-lag Pearson r (primary), peak cross-correlation r (secondary).
 
 Outputs (all saved to ANALYSIS_DIR):
     - stats_phase_comparison.csv
     - stats_real_vs_surrogate.csv
     - stats_zoom_effect.csv
-    - stats_performance_correlation.csv  (if performance file provided)
-    - stats_summary.txt                  (human-readable overview)
+    - stats_performance_correlation.csv
+    - stats_summary.txt
 
 Run after synchrony_analysis.py.
 """
@@ -146,8 +146,7 @@ def test_phase_comparison(agg):
     """
     Test whether facial synchrony differs across the three task phases.
 
-    Uses repeated-measures ANOVA (Greenhouse-Geisser corrected) if data are
-    normally distributed, otherwise Friedman's test. Dyad-level means are
+    Uses repeated-measures ANOVA if data are normally distributed, otherwise Friedman's test. Dyad-level means are
     computed first, collapsing across runs within a phase.
 
     Args:
@@ -184,7 +183,11 @@ def test_phase_comparison(agg):
                 rm = pg.rm_anova(data=long, dv="score", within="phase",
                                  subject="nav_dyad", correction=True)
                 F    = rm["F"].iloc[0]
-                p    = rm["p-unc"].iloc[0]
+                p    = np.nan
+                for _p_col in ["p_GG_corr", "p_unc", "p-GG-corr", "p-unc", "p_hf_corr", "p-hf-corr"]:
+                    if _p_col in rm.columns and pd.notna(rm[_p_col].iloc[0]):
+                        p = float(rm[_p_col].iloc[0])
+                        break
                 eta2 = np.nan
                 for _eta_col in ["ng2", "np2", "eta-sq", "eta2", "eps"]:
                     if _eta_col in rm.columns:
@@ -197,7 +200,7 @@ def test_phase_comparison(agg):
                     f"{PHASE_MAP.get(r.get('A', ''), r.get('A', ''))} vs "
                     f"{PHASE_MAP.get(r.get('B', ''), r.get('B', ''))}: "
                     f"t={r.get('T', r.get('t', float('nan'))):.2f}, "
-                    f"p_corr={r.get('p_corr', r.get('p-corr', float('nan'))):.3f}"
+                    f"p_corr={r.get('p_corr', r.get('p-corr', r.get('p_adjust', r.get('p-adjust', float('nan'))))):.3f}"
                     for _, r in ph.iterrows()
                 )
             except Exception as e:
