@@ -179,7 +179,7 @@ def fig_perdyad_spaghetti(agg):
 
 def fig_emotion_by_phase(agg):
     """Grouped bar chart of emotion composite synchrony by phase."""
-    emotion_sigs  = [s for s in SIGNAL_ORDER if s != "expressivity"]
+    emotion_sigs  = SIGNAL_ORDER
     emotion_names = [SIGNAL_LABELS[s] for s in emotion_sigs]
     x = np.arange(len(emotion_sigs))
     width = 0.25
