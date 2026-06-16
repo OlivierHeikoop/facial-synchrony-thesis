@@ -238,7 +238,7 @@ def test_real_vs_surrogate(agg):
     Test whether real dyad synchrony exceeds the surrogate chance baseline.
 
     One-sample Wilcoxon signed-rank test on difference scores (real minus mean
-    surrogate), tested directionally (alternative='greater'). FDR correction
+    surrogate), tested non-directionally (alternative='two-sided'). FDR correction
     applied across signals within each phase separately.
 
     Args:
@@ -263,7 +263,7 @@ def test_real_vs_surrogate(agg):
             if len(vals) < 5:
                 continue
             try:
-                w, p = wilcoxon(vals, alternative="greater")
+                w, p = wilcoxon(vals, alternative="two-sided")
             except Exception:
                 w, p = np.nan, np.nan
             pvals.append(p)
