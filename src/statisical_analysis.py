@@ -572,9 +572,12 @@ def test_surrogate_corrected_performance(agg, perf_df, perf_cols):
     surr_dfs = []
     for pc in surr_corr_df["perf_metric"].unique():
         sub = surr_corr_df[surr_corr_df["perf_metric"] == pc].copy()
-        _, p_fdr, _, _ = multipletests(sub["p_raw_corr"], method="fdr_bh")
-        sub["p_fdr_corrected"] = p_fdr.round(4)
-        sub["significant"]     = p_fdr < 0.05
+        _, p_fdr_corr, _, _ = multipletests(sub["p_raw_corr"], method="fdr_bh")
+        sub["p_fdr_corrected"] = p_fdr_corr.round(4)
+        sub["significant"]     = p_fdr_corr < 0.05
+        _, p_fdr_raw, _, _ = multipletests(sub["p_raw_raw"], method="fdr_bh")
+        sub["p_fdr_raw"]        = p_fdr_raw.round(4)
+        sub["significant_raw"] = p_fdr_raw < 0.05
         surr_dfs.append(sub)
     surr_corr_df = pd.concat(surr_dfs, ignore_index=True)
 

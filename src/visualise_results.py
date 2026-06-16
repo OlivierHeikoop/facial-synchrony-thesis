@@ -288,11 +288,10 @@ def fig_difference_scores(agg, surr_df):
         axes[ax_idx].set_visible(False)
     handles = [mpatches.Patch(color=c, label=p) for p, c in phase_colors_bar.items()]
     fig.legend(handles=handles, loc="lower right", fontsize=10, title="Phase", framealpha=0.9)
+    plt.subplots_adjust(hspace=0.6, top=0.85, bottom=0.08)
     fig.suptitle("Above-Chance Synchrony: Real − Surrogate Difference Scores\n"
                  "(* p<.05, ** p<.01, *** p<.001 after FDR correction)",
-                 fontsize=12, fontweight="bold", y=1.02)
-    plt.tight_layout(rect=[0, 0, 1, 0.95])
-    plt.subplots_adjust(hspace=0.5, top=0.88)
+                 fontsize=12, fontweight="bold")
     plt.show()
 
 def fig_effect_sizes_real_vs_surrogate(surr_df):
@@ -782,8 +781,8 @@ def fig_raw_vs_corrected(surr_corr_df, perf_metric="team_total_score"):
     fig, axes = plt.subplots(1, 2, figsize=(13, 5), sharey=True)
 
     ax = axes[0]
-    raw_colors = ["#E07B54" if p < 0.05 else "lightgray"
-                  for p in compare["p_raw_raw"]]
+    raw_colors = ["#E07B54" if s else "lightgray"
+                  for s in compare["significant_raw"]]
     ax.barh(y, r_raw, color=raw_colors, edgecolor="white", height=0.6)
     ax.axvline(0, color="black", lw=0.8, ls="--")
     ax.set_yticks(y)
@@ -791,9 +790,8 @@ def fig_raw_vs_corrected(surr_corr_df, perf_metric="team_total_score"):
     ax.set_xlabel("Spearman r", fontsize=11)
     ax.set_title("Raw synchrony\nvs team total score",
                  fontsize=12, fontweight="bold")
-    ax.text(0.98, 0.02, "orange = p<.05 (uncorrected)",
+    ax.text(0.98, 0.02, "orange = significant after FDR",
             transform=ax.transAxes, ha="right", fontsize=8, color="gray")
-
     ax = axes[1]
     corr_colors = ["#5B8DB8" if s else "lightgray" for s in sig_mask]
     ax.barh(y, r_corr, color=corr_colors, edgecolor="white", height=0.6)
