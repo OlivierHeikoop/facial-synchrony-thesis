@@ -290,8 +290,9 @@ def fig_difference_scores(agg, surr_df):
     fig.legend(handles=handles, loc="lower right", fontsize=10, title="Phase", framealpha=0.9)
     fig.suptitle("Above-Chance Synchrony: Real − Surrogate Difference Scores\n"
                  "(* p<.05, ** p<.01, *** p<.001 after FDR correction)",
-                 fontsize=12, fontweight="bold")
-    plt.tight_layout()
+                 fontsize=12, fontweight="bold", y=1.02)
+    plt.tight_layout(rect=[0, 0, 1, 0.95])
+    plt.subplots_adjust(hspace=0.5, top=0.88)
     plt.show()
 
 def fig_effect_sizes_real_vs_surrogate(surr_df):
